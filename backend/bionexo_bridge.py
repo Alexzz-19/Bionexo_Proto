@@ -2,8 +2,11 @@
 Lee el sensor MQ-135 desde Arduino/Snapino por serial y publica
 en la tabla mediciones_aire(valor_ppm, estado).
 
-Configuracion por variables de entorno (.env). Mantiene fallback
-a los valores historicos para no romper instalaciones existentes.
+Configuracion unicamente por variables de entorno (backend/.env en local,
+--env-file en Podman). Comportamiento fail-fast: si SUPABASE_URL o
+SUPABASE_KEY no estan definidas, el programa termina con SystemExit
+y un mensaje que indica como crear el .env. No existen fallbacks con
+secretos en el codigo.
 Intervalo del sensor: 30 segundos. Tabla Supabase: no renombrar.
 """
 import os

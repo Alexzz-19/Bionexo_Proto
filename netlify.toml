@@ -1,6 +1,9 @@
 [build]
   publish = "frontend"
-  command = ""
+  # Genera frontend/env.js inyectando las Environment Variables de Netlify
+  # (SUPABASE_URL, SUPABASE_KEY) hacia window.__ENV__. El archivo generado
+  # esta en .gitignore y nunca toca el repo.
+  command = "printf 'window.__ENV__ = { SUPABASE_URL: \"%s\", SUPABASE_KEY: \"%s\" };' \"$SUPABASE_URL\" \"$SUPABASE_KEY\" > frontend/env.js"
 
 [[redirects]]
   from = "/*"
@@ -8,8 +11,8 @@
   status = 200
 
 # NETLIFY: Site settings > Environment variables
-# SUPABASE_URL=https://wivebefyzcataixxjbhx.supabase.co
-# SUPABASE_KEY=tu_nueva_key_rotada
+#   SUPABASE_URL  = https://TU-PROYECTO.supabase.co
+#   SUPABASE_KEY  = tu_key_publishable (rotada, nunca la historica expuesta)
 # La tabla mediciones_aire NO se renombra.
-# Si usas snippet window.__ENV__, agregalo en Build > Snippet injection
-# o genera frontend/env.js desde las env vars en el build.
+# Para desarrollo local, copia frontend/config.example.js como frontend/env.js
+# y llena tus valores (ese archivo esta en .gitignore).

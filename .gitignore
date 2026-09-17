@@ -9,6 +9,10 @@ __pycache__/
 .venv/
 venv/
 
+# Node / builds futuros
+node_modules/
+dist/
+
 # Podman / Docker
 *.log
 
