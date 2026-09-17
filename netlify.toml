@@ -1,0 +1,15 @@
+[build]
+  publish = "frontend"
+  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# NETLIFY: Site settings > Environment variables
+# SUPABASE_URL=https://wivebefyzcataixxjbhx.supabase.co
+# SUPABASE_KEY=tu_nueva_key_rotada
+# La tabla mediciones_aire NO se renombra.
+# Si usas snippet window.__ENV__, agregalo en Build > Snippet injection
+# o genera frontend/env.js desde las env vars en el build.

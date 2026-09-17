@@ -1,0 +1,18 @@
+# Secretos y entorno local - no subir
+.env
+*.env
+frontend/env.js
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Podman / Docker
+*.log
+
+# Sistema
+ Thumbs.db
+.DS_Store
+desktop.ini

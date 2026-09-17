@@ -1,0 +1,18 @@
+# Usar una imagen ligera de Python
+FROM python:3.11-slim
+
+# Evitar que Python acumule buffers de salida en la terminal
+ENV PYTHONUNBUFFERED=1
+
+# Establecer carpeta de trabajo (corregido: WORKDIR, no WORKDIR)
+WORKDIR /app
+
+# Copiar e instalar dependencias
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el script puente oficial
+COPY backend/bionexo_bridge.py .
+
+# Comando de ejecución
+CMD ["python", "bionexo_bridge.py"]

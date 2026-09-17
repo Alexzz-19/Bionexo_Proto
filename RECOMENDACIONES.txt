@@ -1,0 +1,60 @@
+RECOMENDACIONES PROYECTO BIONEXO - ARDUINO + SUPABASE + PODMAN
+Fecha: 2026-09-06
+Carpeta: PROYECTO ARDUINO
+
+============================================================
+1. RESUMEN
+============================================================
+Proyecto IoT: Sensor MQ-135 -> Arduino/Snapino (COM4 9600)
+-> Puente Python (backend/bionexo_bridge.py) -> Supabase
+(tabla mediciones_aire, NO renombrar) -> Dashboard (frontend/index.html)
+deploy en Netlify. Intervalo fijo del sensor: 30 segundos.
+
+============================================================
+2. ESTRUCTURA PROFESIONAL ACTUAL
+============================================================
+  firmware/bionexo_node/bionexo_node.ino  # oficial (30 s, 9600 baudios)
+  backend/bionexo_bridge.py               # oficial (reconexion + .env)
+  backend/requirements.txt
+  backend/Containerfile                   # Podman (WORKDIR corregido)
+  backend/.env.example                    # copiar como .env, NO subir
+  frontend/index.html                     # dashboard oficial Netlify
+  frontend/config.example.js              # ejemplo window.__ENV__
+  netlify.toml                            # publish = frontend
+  README.md
+  .gitignore                              # .env, .venv/, __pycache__/
+
+============================================================
+3. BUGS CORREGIDOS
+============================================================
+[1] Containerfile: WORKDIR -> WORKDIR.
+[2] Puente unificado con reconexion cada 5 s y errores de red separados.
+[3] Estados normalizados: Optimo/Óptimo -> Óptimo, Moderado, Elevado/Alerta/Peligro -> Alerta.
+    Umbrales intactos (<200/<400). Sin UPDATE/DELETE en Supabase.
+[4] Dashboard: conteo de barras acepta datos viejos y nuevos.
+[5] Textos unificados a 30 segundos (era 20 s en un dashboard viejo).
+[6] Puerto/baud por entorno SERIAL_PORT/BAUD_RATE (default COM4/9600).
+[7] requirements con versiones + python-dotenv.
+[8] .venv/ eliminado del proyecto (regenerar con pip install -r backend/requirements.txt).
+
+============================================================
+4. API KEY SECRETA
+============================================================
+BACKEND (ocultable 100%):
+  pip install -r backend/requirements.txt
+  copiar backend/.env.example -> backend/.env y llenar key ROTADA
+  podman run --env-file backend/.env bionexo-bridge
+  Nunca commitear .env.
+
+FRONTEND Netlify (la sb_publishable_ es publica por diseno):
+  1. ROTAR la key historica en Supabase > Settings > API (ya estuvo expuesta).
+  2. Env vars en Netlify: SUPABASE_URL, SUPABASE_KEY.
+  3. RLS en mediciones_aire: SELECT publico si, INSERT anon no (solo backend escribe).
+
+============================================================
+5. COMANDOS
+============================================================
+  python backend/bionexo_bridge.py
+  podman machine start
+  podman build -f backend/Containerfile -t bionexo-bridge .
+  podman run --env-file backend/.env bionexo-bridge
